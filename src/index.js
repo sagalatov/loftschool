@@ -25,7 +25,7 @@ function createDivWithText(text) {
    prepend(document.querySelector('#one'), document.querySelector('#two')) // добавит элемент переданный первым аргументом в начало элемента переданного вторым аргументом
  */
 function prepend(what, where) {
-  where.appendChild(what);
+  where.prepend(what);
 }
 
 /*
@@ -116,8 +116,8 @@ function deleteTextNodes(where) {
    должно быть преобразовано в <span><div><b></b></div><p></p></span>
  */
 function deleteTextNodesRecursive(where) {
-  let arr = Array.from(where.childNodes);
-  for (let item of arr) {
+  //let arr = Array.from(where.childNodes);
+ for (let item of [...where.childNodes]) {
     if (item.nodeType === 3) {
       item.remove();
     } else {
