@@ -42,3 +42,47 @@ const addValueInput = homeworkContainer.querySelector('#add-value-input');
 const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
+
+
+let cookieObj = document.cookie.split('; ').reduce((prev, current) => {
+  const [name, value] = current.split("=");
+  prev[name] = value;
+  return prev;
+  }, {});
+
+  
+  for (name in cookieObj){
+    createCookie(`${name} ${cookieObj[name]}`)
+  }
+
+  function createCookie (nameValue) {
+    const deleteButton = document.createElement('button');
+
+    homeworkContainer.appendChild(deleteButton);
+
+    const newItem = document.createElement('li');
+
+    homeworkContainer.appendChild(newItem);
+
+    newItem.textContent = nameValue;
+    deleteButton.textContent = "Удалить";
+    newItem.appendChild(deleteButton);
+    listTable.appendChild(newItem);
+    let [name, value] = newItem.firstChild.textContent.split(' ');
+    let date = new Date(Date.now() + 86400e3);
+    date = date.toUTCString();
+    document.cookie = `"${name}=${value}; expires="`+ date;  
+    
+    deleteButton.addEventListener('click', function(){
+      deleteCookie(newItem);
+    });
+  }
+
+
+function deleteCookie(newItem) {
+  listTable.removeChild(newItem);
+  let [name, value] = newItem.firstChild.textContent.split(' ');
+  let date = new Date(Date.now() - 86400e3);
+  date = date.toUTCString();
+  document.cookie = `"${name}=${value}; expires="`+ date;  
+}
