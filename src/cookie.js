@@ -44,44 +44,46 @@ const addButton = homeworkContainer.querySelector('#add-button');
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
 
+const table = document.createElement('table');
+homeworkContainer.appendChild(table);
+
+
 let cookieObj = document.cookie.split('; ').reduce((prev, current) => {
   const [name, value] = current.split("=");
   prev[name] = value;
   return prev;
   }, {});
 
-  
+
   for (name in cookieObj){
     createCookie(`${name} ${cookieObj[name]}`)
   }
 
   function createCookie (nameValue) {
+
     const deleteButton = document.createElement('button');
-
-    homeworkContainer.appendChild(deleteButton);
-
-    const newItem = document.createElement('li');
-
-    homeworkContainer.appendChild(newItem);
-
-    newItem.textContent = nameValue;
     deleteButton.textContent = "Удалить";
-    newItem.appendChild(deleteButton);
-    listTable.appendChild(newItem);
-    let [name, value] = newItem.firstChild.textContent.split(' ');
+
+    const td = document.createElement('td');
+    const tr = document.createElement('tr');
+    td.textContent = nameValue;
+    td.appendChild(deleteButton);
+    tr.appendChild(td);
+    table.appendChild(tr);
+
+    let [name, value] = td.firstChild.textContent.split(' ');
     let date = new Date(Date.now() + 86400e3);
     date = date.toUTCString();
     document.cookie = `"${name}=${value}; expires="`+ date;  
     
     deleteButton.addEventListener('click', function(){
-      deleteCookie(newItem);
+      deleteCookie(tr);
     });
   }
 
-
-function deleteCookie(newItem) {
-  listTable.removeChild(newItem);
-  let [name, value] = newItem.firstChild.textContent.split(' ');
+function deleteCookie(tr) {
+  table.removeChild(tr);
+  let [name, value] = tr.firstChild.textContent.split(' ');
   let date = new Date(Date.now() - 86400e3);
   date = date.toUTCString();
   document.cookie = `"${name}=${value}; expires="`+ date;  
