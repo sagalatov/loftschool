@@ -37,45 +37,29 @@ const container = document.querySelector('#filter-result');
 const formValue = document.querySelector('#filter-input');
 const loading = document.querySelector('#loading-block');
 const fragment = document.createDocumentFragment();
-const allTowns = [];
 loading.innerText = " ";
 
-const xhr = new XMLHttpRequest();
-xhr.open('GET', 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json');
-xhr.responseType = "json";
-xhr.send();
 
-xhr.addEventListener('load', () => {
-  if (xhr.status >= 400) {
-    console.log("Что-то пошло не так");
-  } else {
-    const towns = xhr.response;
-    for (const town of towns) {
-      allTowns.push(town.name);
-    }
-  }
-
-});
+const getTowns = async() => {
+  const allTowns = await fetch('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
+  .then(res => res.json());
+  .then(towns => {
+    
+    towns.map(town => town.name)
+  })
+  .catch(e => console.error("Важная ошибка"))
+  return allTowns;
+}
 
 formValue.addEventListener('keydown', () => {
-  if (event.code.includes('Key') || event.key == 'Shift') {
+  if (event.code.includes('Key') || event.key === 'Shift') {
 
     for (const town of allTowns) {
-      if (town.toUpperCase().includes(formValue.value.toUpperCase()) && formValue.value.toUpperCase().length > 1) {
+      if (town.toLowerCase().includes(formValue.value.toLowerCase()) && formValue.value.toLowerCase().length > 1) {
         fragment.appendChild(createTownDom(town));
-        const promise = new Promise((resolve) => {
-          loading.innerText = "Загрузка...";
-          setTimeout(() => {
-            resolve();
-            container.appendChild(fragment);
-          }, 3000);
-        });
-        promise.then(() => {
-          loading.innerText = " ";
-        });
       }
     }
-  } else if (event.key == 'Backspace') {
+  } else if (event.key === 'Backspace') {
     while (container.firstChild) {
       container.removeChild(container.firstChild);
     }
@@ -88,7 +72,6 @@ function createTownDom(town) {
   return div;
 }
 
-}
 
 export {
     delayPromise,
