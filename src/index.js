@@ -42,11 +42,8 @@ loading.innerText = " ";
 
 const getTowns = async() => {
   const allTowns = await fetch('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
-  .then(res => res.json());
-  .then(towns => {
-    
-    towns.map(town => town.name)
-  })
+  .then(res => res.json())
+  .then(towns => towns.map(town => town.name))
   .catch(e => console.error("Важная ошибка"))
   return allTowns;
 }
