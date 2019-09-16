@@ -42,11 +42,7 @@ const addValueInput = homeworkContainer.querySelector('#add-value-input');
 const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
-
-
-
-const table = document.createElement('table');
-homeworkContainer.appendChild(table);
+homeworkContainer.appendChild(listTable);
 
 
 let cookieObj = document.cookie.split('; ').reduce((prev, current) => {
@@ -69,7 +65,7 @@ let cookieObj = document.cookie.split('; ').reduce((prev, current) => {
     td.textContent = nameValue;
     td.appendChild(deleteButton);
     tr.appendChild(td);
-    table.appendChild(tr);
+    listTable.appendChild(tr);
 
     deleteButton.addEventListener('click', function(){
       deleteCookie(tr);
