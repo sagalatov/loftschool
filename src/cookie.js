@@ -44,7 +44,6 @@ const addButton = homeworkContainer.querySelector('#add-button');
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
 
-listTable.style.cssText = "border: 1px solid black"
 homeworkContainer.appendChild(listTable);
 
 
@@ -52,53 +51,51 @@ let cookieObj = document.cookie.split('; ').reduce((prev, current) => {
   const [name, value] = current.split("=");
   prev[name] = value;
   return prev;
-  }, {});
+}, {});
 
 
-  for (name in cookieObj){
-    createCookie(`${name} ${cookieObj[name]}`)
-  }
+for (name in cookieObj) {
+  createCookie(`${name} ${cookieObj[name]}`)
+}
 
-  function createCookie (nameValue) {
+function createCookie(nameValue) {
 
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = "Удалить";
-    deleteButton.style.cssText = "float: right; margin-left: 20px;"
+  const deleteButton = document.createElement('button');
+  deleteButton.textContent = "Удалить";
 
-    const td = document.createElement('td');
-    const tr = document.createElement('tr');
+  const td = document.createElement('td');
+  const tr = document.createElement('tr');
 
-    td.style.cssText = "border: 1px solid black"
-    tr.style.cssText = "margin-right: 20px"
+  td.style.cssText = "border: 1px solid black"
 
-   
-    td.textContent = nameValue;
-    td.appendChild(deleteButton);
-    tr.appendChild(td);
-    listTable.appendChild(tr);
 
-    deleteButton.addEventListener('click', function(){
-      deleteCookie(tr);
-    });
+  td.textContent = nameValue;
+  td.appendChild(deleteButton);
+  tr.appendChild(td);
+  listTable.appendChild(tr);
 
-  }
+  deleteButton.addEventListener('click', function () {
+    deleteCookie(tr);
+  });
+
+}
 
 function deleteCookie(tr) {
   let [name, value] = tr.firstChild.firstChild.textContent.split(' ');
   let date = new Date(Date.now() - 86400e3);
   date = date.toUTCString();
   listTable.removeChild(tr);
-  document.cookie = `${name}=${value}; expires="`+ date;  
+  document.cookie = `${name}=${value}; expires="` + date;
 }
 
 
 
-addButton.addEventListener('click', function() {
-if(`${addNameInput.value}`.length > 0 && `${addValueInput.value}`.length > 0){
-document.cookie = `${addNameInput.value}=${addValueInput.value}`;
-createCookie(`${addNameInput.value} ${addValueInput.value}`);
-addNameInput.value = '';
-addValueInput.value = '';
-}
+addButton.addEventListener('click', function () {
+  if (`${addNameInput.value}`.length > 0 && `${addValueInput.value}`.length > 0) {
+    document.cookie = `${addNameInput.value}=${addValueInput.value}`;
+    createCookie(`${addNameInput.value} ${addValueInput.value}`);
+    addNameInput.value = '';
+    addValueInput.value = '';
+  }
 
 });
