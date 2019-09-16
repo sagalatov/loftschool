@@ -13,7 +13,7 @@ function delayPromise(seconds) {
     setTimeout(() => {
       resolve();
     }, seconds*1000)
-  });
+  })
   return promise;
 }
 
@@ -31,46 +31,3 @@ function delayPromise(seconds) {
  Пример:
    loadAndSortTowns().then(towns => console.log(towns)) // должна вывести в консоль отсортированный массив городов
  */
-function loadAndSortTowns() {
-const loadButton = document.querySelector('#LoadButton');
-const container = document.querySelector('#filter-result');
-const formValue = document.querySelector('#filter-input');
-const loading = document.querySelector('#loading-block');
-const fragment = document.createDocumentFragment();
-
-
-const getTowns = async() => {
-  const allTowns = await fetch('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
-  .then(res => res.json())
-  .then(towns => towns.map(town => town.name))
-  .catch(e => console.error("Важная ошибка"))
-  return allTowns;
-}
-
-formValue.addEventListener('keydown', () => {
-  if (event.code.includes('Key') || event.key === 'Shift') {
-
-    for (const town of allTowns) {
-      if (town.toLowerCase().includes(formValue.value.toLowerCase()) && formValue.value.toLowerCase().length > 1) {
-        fragment.appendChild(createTownDom(town));
-      }
-    }
-  } else if (event.key === 'Backspace') {
-    while (container.firstChild) {
-      container.removeChild(container.firstChild);
-    }
-  }
-});
-
-function createTownDom(town) {
-  const div = document.createElement('div');
-  div.textContent = town;
-  return div;
-}
-
-
-export {
-    delayPromise,
-    loadAndSortTowns
-}
-}

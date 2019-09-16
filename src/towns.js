@@ -37,7 +37,51 @@ const homeworkContainer = document.querySelector('#homework-container');
  https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json
  */
 function loadTowns() {
-}
+    const loadButton = document.querySelector('#LoadButton');
+    const container = document.querySelector('#filter-result');
+    const formValue = document.querySelector('#filter-input');
+    const loading = document.querySelector('#loading-block');
+    const fragment = document.createDocumentFragment();
+    const allTowns = [];
+    loading.style.cssText = "display: none"
+    
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json');
+    xhr.responseType = "json";
+    xhr.send();
+    xhr.addEventListener('load', () => {
+      if (xhr.status >= 400) {
+        console.log("Что-то пошло не так");
+      } else {
+        const towns = xhr.response;
+        for (const town of towns) {
+          allTowns.push(town.name);
+        }
+      }
+    });
+    formValue.addEventListener('keydown', () => {
+      if (event.code.includes('Key') || event.key === 'Shift') {
+        loading.style.cssText = "display: block"
+        for (const town of allTowns) {
+          if (town.toLowerCase().includes(formValue.value.toLowerCase()) && formValue.value.toLowerCase().length > 1) {
+            fragment.appendChild(createTownDom(town));
+            container.appendChild(fragment);
+            loading.style.cssText = "display: none"
+          }
+        }
+      } else if (event.key === 'Backspace') {
+        loading.style.cssText = "display: none"
+        while (container.firstChild) {
+          container.removeChild(container.firstChild);
+        }
+      }
+    });
+    function createTownDom(town) {
+      const div = document.createElement('div');
+      div.textContent = town;
+      return div;
+    }
+  }
 
 /*
  Функция должна проверять встречается ли подстрока chunk в строке full
@@ -70,3 +114,7 @@ export {
     loadTowns,
     isMatching
 };
+
+
+
+
