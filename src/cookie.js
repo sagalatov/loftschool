@@ -44,6 +44,7 @@ const addButton = homeworkContainer.querySelector('#add-button');
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
 
+
 const table = document.createElement('table');
 homeworkContainer.appendChild(table);
 
@@ -63,7 +64,6 @@ let cookieObj = document.cookie.split('; ').reduce((prev, current) => {
 
     const deleteButton = document.createElement('button');
     deleteButton.textContent = "Удалить";
-
     const td = document.createElement('td');
     const tr = document.createElement('tr');
     td.textContent = nameValue;
@@ -71,20 +71,15 @@ let cookieObj = document.cookie.split('; ').reduce((prev, current) => {
     tr.appendChild(td);
     table.appendChild(tr);
 
-    let [name, value] = td.firstChild.textContent.split(' ');
-    let date = new Date(Date.now() + 86400e3);
-    date = date.toUTCString();
-    document.cookie = `"${name}=${value}; expires="`+ date;  
-    
     deleteButton.addEventListener('click', function(){
       deleteCookie(tr);
     });
   }
 
 function deleteCookie(tr) {
-  table.removeChild(tr);
-  let [name, value] = tr.firstChild.textContent.split(' ');
+  let [name, value] = tr.firstChild.firstChild.textContent.split(' ');
   let date = new Date(Date.now() - 86400e3);
   date = date.toUTCString();
-  document.cookie = `"${name}=${value}; expires="`+ date;  
+  table.removeChild(tr);
+  document.cookie = `${name}=${value}; expires="`+ date;  
 }
