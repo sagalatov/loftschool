@@ -42,6 +42,9 @@ const addValueInput = homeworkContainer.querySelector('#add-value-input');
 const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
+
+
+listTable.style.cssText = "border: 1px solid black"
 homeworkContainer.appendChild(listTable);
 
 
@@ -60,8 +63,15 @@ let cookieObj = document.cookie.split('; ').reduce((prev, current) => {
 
     const deleteButton = document.createElement('button');
     deleteButton.textContent = "Удалить";
+    deleteButton.style.cssText = "float: right; margin-left: 20px;"
+
     const td = document.createElement('td');
     const tr = document.createElement('tr');
+
+    td.style.cssText = "border: 1px solid black"
+    tr.style.cssText = "margin-right: 20px"
+
+   
     td.textContent = nameValue;
     td.appendChild(deleteButton);
     tr.appendChild(td);
@@ -70,12 +80,25 @@ let cookieObj = document.cookie.split('; ').reduce((prev, current) => {
     deleteButton.addEventListener('click', function(){
       deleteCookie(tr);
     });
+
   }
 
 function deleteCookie(tr) {
   let [name, value] = tr.firstChild.firstChild.textContent.split(' ');
   let date = new Date(Date.now() - 86400e3);
   date = date.toUTCString();
-  table.removeChild(tr);
+  listTable.removeChild(tr);
   document.cookie = `${name}=${value}; expires="`+ date;  
 }
+
+
+
+addButton.addEventListener('click', function() {
+if(`${addNameInput.value}`.length > 0 && `${addValueInput.value}`.length > 0){
+document.cookie = `${addNameInput.value}=${addValueInput.value}`;
+createCookie(`${addNameInput.value} ${addValueInput.value}`);
+addNameInput.value = '';
+addValueInput.value = '';
+}
+
+});
