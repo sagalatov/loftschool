@@ -37,7 +37,6 @@ const container = document.querySelector('#filter-result');
 const formValue = document.querySelector('#filter-input');
 const loading = document.querySelector('#loading-block');
 const fragment = document.createDocumentFragment();
-loading.innerText = " ";
 
 
 const getTowns = async() => {
@@ -73,4 +72,5 @@ function createTownDom(town) {
 export {
     delayPromise,
     loadAndSortTowns
-};
+}
+}
