@@ -59,16 +59,12 @@ for (name in cookieObj) {
 }
 
 function createCookie(nameValue) {
-
+  
   const deleteButton = document.createElement('button');
   deleteButton.textContent = "Удалить";
-
+  
   const td = document.createElement('td');
   const tr = document.createElement('tr');
-
-  td.style.cssText = "border: 1px solid black"
-
-
   td.textContent = nameValue;
   td.appendChild(deleteButton);
   tr.appendChild(td);
@@ -92,6 +88,7 @@ function deleteCookie(tr) {
 
 addButton.addEventListener('click', function () {
   if (`${addNameInput.value}`.length > 0 && `${addValueInput.value}`.length > 0) {
+    delMatchCookie(`${addNameInput.value}`);
     document.cookie = `${addNameInput.value}=${addValueInput.value}`;
     createCookie(`${addNameInput.value} ${addValueInput.value}`);
     addNameInput.value = '';
@@ -99,3 +96,22 @@ addButton.addEventListener('click', function () {
   }
 
 });
+
+filterNameInput.addEventListener('keydown', () => {
+    for (name in cookieObj) {
+      if (name.toLowerCase().includes(filterNameInput.value.toLowerCase()) && cookieObj[name].toLowerCase().includes(filterNameInput.value.toLowerCase())) {
+      } else if (event.key === 'Backspace') {
+      console.log(cookieObj[name]);
+      }
+  }
+});
+
+function delMatchCookie(nameValue) {
+  let allTd = listTable.querySelectorAll("td");
+  for (let i = 0; i < allTd.length; i++) {
+  if (allTd[i].textContent.split(' ')[0] === `${addNameInput.value}`){
+    allTd[i].remove();
+    }
+  }
+  return true;
+}
