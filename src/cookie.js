@@ -47,6 +47,11 @@ const listTable = homeworkContainer.querySelector('#list-table tbody');
 homeworkContainer.appendChild(listTable);
 
 
+
+const fragment = document.createDocumentFragment();
+homeworkContainer.appendChild(listTable);
+
+
 let cookieObj = document.cookie.split('; ').reduce((prev, current) => {
   const [name, value] = current.split("=");
   prev[name] = value;
@@ -54,15 +59,17 @@ let cookieObj = document.cookie.split('; ').reduce((prev, current) => {
 }, {});
 
 
+
 for (name in cookieObj) {
   createCookie(`${name} ${cookieObj[name]}`)
 }
 
+
 function createCookie(nameValue) {
-  
+
   const deleteButton = document.createElement('button');
   deleteButton.textContent = "Удалить";
-  
+
   const td = document.createElement('td');
   const tr = document.createElement('tr');
   td.textContent = nameValue;
@@ -84,9 +91,21 @@ function deleteCookie(tr) {
   document.cookie = `${name}=${value}; expires="` + date;
 }
 
-
-
 addButton.addEventListener('click', function () {
+  if (filterNameInput.value.length > 0) {
+    if (!(`${addNameInput.value}`.includes(filterNameInput.value) || `${addValueInput.value}`.includes(filterNameInput.value))) {
+      document.cookie = `${addNameInput.value}=${addValueInput.value}`;
+    }
+    let allTd = listTable.querySelectorAll("td");
+    for (let i = 0; i < allTd.length; i++) {
+      if ((allTd[i].textContent.split(' ')[0] === `${addNameInput.value}`) && !(`${addValueInput.value}`.includes(filterNameInput.value))) {
+        document.cookie = `${addNameInput.value}=${addValueInput.value}`;
+        allTd[i].remove();
+      }
+    }
+    return;
+  }
+
   if (`${addNameInput.value}`.length > 0 && `${addValueInput.value}`.length > 0) {
     delMatchCookie(`${addNameInput.value}`);
     document.cookie = `${addNameInput.value}=${addValueInput.value}`;
@@ -97,21 +116,36 @@ addButton.addEventListener('click', function () {
 
 });
 
-filterNameInput.addEventListener('keydown', () => {
-    for (name in cookieObj) {
-      if (name.toLowerCase().includes(filterNameInput.value.toLowerCase()) && cookieObj[name].toLowerCase().includes(filterNameInput.value.toLowerCase())) {
-      } else if (event.key === 'Backspace') {
-      console.log(cookieObj[name]);
+filterNameInput.addEventListener('keydown', (event) => {
+
+  let allTd = listTable.querySelectorAll("td");
+  setTimeout(() => {
+    for (let i = 0; i < allTd.length; i++) {
+      if (!allTd[i].firstChild.textContent.toLowerCase().includes(filterNameInput.value.toLowerCase())) {
+        filterNameInput.value.toLowerCase()
+        allTd[i].parentNode.remove();
       }
+    }
+  }, 3000);
+  if (event.key == 'Backspace' && filterNameInput.value.length <= 1) {
+    console.log(listTable);
+    while (listTable.firstChild) {
+      listTable.removeChild(listTable.firstChild);
+    }
+    for (name in cookieObj) {
+      createCookie(`${name} ${cookieObj[name]}`)
+    }
   }
 });
+
 
 function delMatchCookie(nameValue) {
   let allTd = listTable.querySelectorAll("td");
   for (let i = 0; i < allTd.length; i++) {
-  if (allTd[i].textContent.split(' ')[0] === `${addNameInput.value}`){
-    allTd[i].remove();
+    if (allTd[i].textContent.split(' ')[0] === `${addNameInput.value}`) {
+      allTd[i].remove();
     }
   }
   return true;
 }
+
