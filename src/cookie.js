@@ -46,8 +46,6 @@ const listTable = homeworkContainer.querySelector('#list-table tbody');
 
 homeworkContainer.appendChild(listTable);
 
-
-
 const fragment = document.createDocumentFragment();
 homeworkContainer.appendChild(listTable);
 
@@ -91,14 +89,18 @@ function deleteCookie(tr) {
   document.cookie = `${name}=${value}; expires="` + date;
 }
 
+function getTextNode(node){
+return node.textContent.split(' ')[0];
+}
+
 addButton.addEventListener('click', function () {
-  if (filterNameInput.value.length > 0) {
+  if (filterNameInput.value.length) {
     if (!(`${addNameInput.value}`.includes(filterNameInput.value) || `${addValueInput.value}`.includes(filterNameInput.value))) {
       document.cookie = `${addNameInput.value}=${addValueInput.value}`;
     }
     let allTd = listTable.querySelectorAll("td");
     for (let i = 0; i < allTd.length; i++) {
-      if ((allTd[i].textContent.split(' ')[0] === `${addNameInput.value}`) && !(`${addValueInput.value}`.includes(filterNameInput.value))) {
+      if ((getTextNode(allTd[i]) === `${addNameInput.value}`) && !(`${addValueInput.value}`.includes(filterNameInput.value))) {
         document.cookie = `${addNameInput.value}=${addValueInput.value}`;
         allTd[i].remove();
       }
@@ -119,16 +121,13 @@ addButton.addEventListener('click', function () {
 filterNameInput.addEventListener('keydown', (event) => {
 
   let allTd = listTable.querySelectorAll("td");
-  setTimeout(() => {
     for (let i = 0; i < allTd.length; i++) {
       if (!allTd[i].firstChild.textContent.toLowerCase().includes(filterNameInput.value.toLowerCase())) {
         filterNameInput.value.toLowerCase()
         allTd[i].parentNode.remove();
       }
     }
-  }, 3000);
   if (event.key == 'Backspace' && filterNameInput.value.length <= 1) {
-    console.log(listTable);
     while (listTable.firstChild) {
       listTable.removeChild(listTable.firstChild);
     }
@@ -142,10 +141,12 @@ filterNameInput.addEventListener('keydown', (event) => {
 function delMatchCookie(nameValue) {
   let allTd = listTable.querySelectorAll("td");
   for (let i = 0; i < allTd.length; i++) {
-    if (allTd[i].textContent.split(' ')[0] === `${addNameInput.value}`) {
+    if (getTextNode(allTd[i]) === `${addNameInput.value}`) {
       allTd[i].remove();
     }
   }
   return true;
 }
+
+
 
