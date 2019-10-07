@@ -1,9 +1,255 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <title>{{htmlWebpackPlugin.options.title}}</title>
+  <script src="https://api-maps.yandex.ru/2.1/?apikey=4d1aed18-b077-4470-833f-4eb86f3b8fda&lang=ru_RU"
+    type="text/javascript"></script>
+  <script src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>
+  <style>
+    html,
+    body,
+    #map {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      border: 0;
+      padding: 0;
+      clip: rect(0 0 0 0);
+      overflow: hidden;
+    }
+
+    .mainContainer {
+      min-height: 750px;
+      width: 500px;
+      background-color: white;
+      border-radius: 20px;
+      font-family: 'Fira Sans', sans-serif;
+      font-size: 20px;
+      color: #4f4f4f;
+      z-index: 15;
+    }
+
+    .headOfContainer {
+      background-color: #ff8663;
+      min-height: 60px;
+      border-radius: 20px 20px 0 0;
+      position: absolute;
+      width: 500px;
+      display: flex;
+    }
+
+    .address {
+      padding: 5px 45px 0 40px;
+      color: white;
+      position: relative;
+      padding-left: 35px;
+      font-size: 15px;
+
+    }
+
+    .address::before {
+      content: " ";
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 11px solid white;
+      position: absolute;
+      top: 10px;
+      left: 15px;
+      vertical-align: middle;
+    }
+
+    .address::after {
+      width: 5px;
+      height: 6px;
+      border: 4px solid white;
+      border-radius: 50%;
+      content: " ";
+      position: absolute;
+      top: 0px;
+      left: 15px;
+    }
+
+    #close {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      background-color: transparent;
+      top: 9px;
+      right: 18px;
+      border: 0;
+      cursor: pointer;
+      font-size: 0;
+      outline: 0;
+      outline-offset: none;
+    }
+
+    #close::after {
+      content: "";
+      position: absolute;
+      width: 24px;
+      height: 7px;
+      background-color: white;
+      border-radius: 10px;
+      transform: rotate(45deg);
+      right: 0px;
+      top: 15px;
+    }
+
+    #close::before {
+      content: "";
+      position: absolute;
+      width: 24px;
+      height: 7px;
+      background-color: white;
+      border-radius: 10px;
+      transform: rotate(-45deg);
+      right: 0px;
+      top: 15px;
+    }
+
+    .bodyContainer {
+
+      padding: 20px;
+      min-height: 150px;
+      overflow: scroll;
+      max-height: 200px;
+    }
+
+    .feedback {
+      display: flex;
+      flex-wrap: wrap;
+      overflow: hidden;
+    }
+
+    .feedback:first-child {
+      padding-top: 50px;
+    }
+
+    .name {
+      font-weight: 500;
+      margin-right: 10px;
+    }
+
+    .namePlace {
+      margin-right: 50px;
+      font-weight: 200;
+    }
+
+    .date {
+      margin-left: 10px;
+      font-weight: 200;
+    }
+
+    .textMessage {
+      text-align: left;
+      padding-top: 0;
+      margin-top: 0;
+      font-weight: 100;
+      max-height: 100px;
+      overflow-y: scroll;
+      min-width: 400px;
+
+    }
+
+    .line {
+      height: 1px;
+      background-color: #dadada;
+      margin: 0 20px;
+    }
+
+    .inputBlock {
+      margin: 0 20px;
+      color: #ff8663;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      height: 50px;
+      margin-bottom: 20px;
+      padding-left: 20px;
+      font-size: 20px;
+      border: 1px solid #cecece;
+      border-radius: 25px;
+      color: #cecece;
+      font-weight: 300;
+      box-sizing: border-box;
+
+    }
+
+    input:focus {
+      border: 1px solid #ff8663;
+      outline: none;
+      color: #4f4f4f;
+    }
+
+    textarea {
+      resize: none;
+      width: 100%;
+      height: 200px;
+      margin-bottom: 20px;
+      padding: 10px 20px;
+      font-size: 20px;
+      border: 1px solid #cecece;
+      border-radius: 25px;
+      color: #cecece;
+      font-weight: 300;
+      box-sizing: border-box;
+    }
+
+    textarea::placeholder {
+      color: #cecece;
+    }
+
+
+    textarea:focus {
+      border: 1px solid #ff8663;
+      outline: none;
+      color: #4f4f4f;
+    }
+
+    #submitButton {
+      width: 130px;
+      height: 50px;
+      background-color: #ff8663;
+      border-radius: 15px;
+      color: white;
+      font-size: 18px;
+      float: right;
+      margin: 0 20px;
+    }
+
+    #submitButton:focus {
+      background-color: #ff6032;
+      color: white;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .ballon_footer {
+      font-size: 12px;
+      text-align: right;
+      color: #7D7D7D;
+      margin-top: 10px;
+    }
+  </style>
 </head>
+
 <body>
+  <div id="map"></div>
+  </div>
+  <script src="script.js"></script>
 </body>
+
 </html>
